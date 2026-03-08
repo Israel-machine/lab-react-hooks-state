@@ -1,14 +1,28 @@
 import React, { useState } from 'react'
-import ProductList from './components/ProductList'
+import ProductList, { sampleProducts } from './components/ProductList'
 import DarkModeToggle from './components/DarkModeToggle'
 import Cart from './components/Cart'
 
 const App = () => {
   // TODO: Implement state for dark mode toggle
+  const [darkMode, setDarkMode] = useState(false);
+  const handleToggleDarkMode = () => {
+    setDarkMode(!darkMode)
+  }
 
   // TODO: Implement state for cart management
+  const [cartItems, setCartItems] = useState([]);
+  const handleAddToCart = (productId) => {
+    const addedItem = sampleProducts.find((product) => product.id == productId)
+    setCartItems([...cartItems, addedItem])
+  }
 
   // TODO: Implement state for category filtering
+  const [category, setCategory] = useState("all")
+  const handleCategoryFiltering = (event) => {
+    const selectedCategory = event.target.value
+    setCategory(selectedCategory)
+  }
 
   return (
     <div>
@@ -19,18 +33,19 @@ const App = () => {
       </p>
 
       {/* TODO: Render DarkModeToggle and implement dark mode functionality */}
+      <DarkModeToggle darkMode={darkMode} handleToggleDarkMode={handleToggleDarkMode} />
 
       {/* TODO: Implement category filter dropdown */}
       <label>Filter by Category: </label>
-      <select>
+      <select onChange={handleCategoryFiltering}>
         <option value="all">All</option>
         <option value="Fruits">Fruits</option>
         <option value="Dairy">Dairy</option>
       </select>
 
-      <ProductList />
+      <ProductList handleAddToCart={handleAddToCart} category={category} />
 
-      {/* TODO: Implement and render Cart component */}
+      <Cart cartItems={cartItems} />
     </div>
   )
 }
